@@ -1,0 +1,1322 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>مولّد البروميت الاحترافي</title>
+  <meta name="description" content="حوّل فكرتك إلى بروميت احترافي جاهز للاستخدام في Google AI Studio و Codex وأدوات Vibe Coding.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231a8a54'/%3E%3Ctext x='50' y='72' font-size='64' text-anchor='middle' fill='white'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
+  <style>
+/* ==========================================================
+   مولّد البروميت الاحترافي — التنسيقات
+   واجهة عربية RTL، وضع ليلي/نهاري، تصميم متجاوب
+   ========================================================== */
+
+:root {
+  --green-900: #0f5132;
+  --green-700: #157347;
+  --green-600: #1a8a54;
+  --green-500: #22a463;
+  --green-300: #7fd1a6;
+  --grad: linear-gradient(135deg, #157347 0%, #1a8a54 55%, #22a463 100%);
+
+  --bg: #f4f7f5;
+  --surface: #ffffff;
+  --surface-2: #f0f4f1;
+  --text: #12211a;
+  --text-muted: #5c6b63;
+  --border: #e2e9e4;
+  --shadow: 0 8px 28px rgba(16, 60, 40, 0.08);
+  --shadow-lg: 0 18px 48px rgba(16, 60, 40, 0.14);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --font: "Segoe UI", "Helvetica Neue", Tahoma, "Cairo", system-ui, sans-serif;
+}
+
+[data-theme="dark"] {
+  --bg: #0d1512;
+  --surface: #14201b;
+  --surface-2: #1b2a23;
+  --text: #eaf3ee;
+  --text-muted: #9db3a7;
+  --border: #24352c;
+  --shadow: 0 8px 28px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.55);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  min-height: 100vh;
+  transition: background .3s, color .3s;
+}
+
+/* ---------- الشريط العلوي ---------- */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; padding: 14px 26px;
+  background: var(--grad); color: #fff;
+  box-shadow: var(--shadow); position: sticky; top: 0; z-index: 50;
+  flex-wrap: wrap;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.logo {
+  font-size: 26px; background: rgba(255,255,255,.18);
+  width: 46px; height: 46px; display: grid; place-items: center;
+  border-radius: 12px; backdrop-filter: blur(6px);
+}
+.brand h1 { font-size: 19px; margin: 0; font-weight: 700; }
+.tagline { font-size: 12px; opacity: .9; }
+.nav { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.nav-link {
+  color: #fff; text-decoration: none; padding: 8px 14px;
+  border-radius: 10px; font-size: 14px; font-weight: 600;
+  transition: background .2s; opacity: .92;
+}
+.nav-link:hover { background: rgba(255,255,255,.15); }
+.nav-link.active { background: rgba(255,255,255,.25); opacity: 1; }
+.icon-btn {
+  background: rgba(255,255,255,.18); border: none; color: #fff;
+  width: 40px; height: 40px; border-radius: 10px; cursor: pointer;
+  font-size: 18px; transition: transform .2s;
+}
+.icon-btn:hover { transform: scale(1.08); }
+
+.statusbar { padding: 8px 26px 0; }
+.badge {
+  display: inline-block; font-size: 12px; font-weight: 600;
+  padding: 4px 12px; border-radius: 20px;
+}
+.badge-online { background: rgba(34,164,99,.15); color: var(--green-600); }
+.badge-local { background: var(--surface-2); color: var(--text-muted); }
+
+/* ---------- الحاوية ---------- */
+.container { max-width: 920px; margin: 22px auto; padding: 0 20px 60px; }
+
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 26px; box-shadow: var(--shadow);
+}
+.card-title { margin: 0 0 6px; font-size: 20px; font-weight: 700; }
+.muted { color: var(--text-muted); }
+.small { font-size: 12px; }
+.hint { color: var(--green-600); font-weight: 600; font-size: 13px; }
+
+/* ---------- المؤشر (Stepper) ---------- */
+.stepper {
+  display: flex; align-items: center; gap: 6px; margin-bottom: 18px;
+  overflow-x: auto; padding-bottom: 6px;
+}
+.step { display: flex; align-items: center; gap: 6px; flex: 0 0 auto; opacity: .5; }
+.step.current, .step.done { opacity: 1; }
+.step-dot {
+  width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--surface-2); color: var(--text-muted); font-size: 13px; font-weight: 700;
+  border: 2px solid var(--border);
+}
+.step.current .step-dot { background: var(--grad); color: #fff; border-color: transparent; }
+.step.done .step-dot { background: var(--green-500); color: #fff; border-color: transparent; }
+.step-label { font-size: 12px; font-weight: 600; white-space: nowrap; }
+.step:not(:last-child)::after {
+  content: ""; width: 18px; height: 2px; background: var(--border); margin: 0 2px;
+}
+
+/* ---------- عناصر الإدخال ---------- */
+.textarea, .input {
+  width: 100%; background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 14px; font-family: inherit;
+  font-size: 15px; color: var(--text); resize: vertical; transition: border .2s;
+}
+.textarea:focus, .input:focus { outline: none; border-color: var(--green-500); }
+.input { margin-top: 8px; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.chip {
+  background: var(--surface-2); border: 1px solid var(--border); color: var(--text-muted);
+  padding: 6px 12px; border-radius: 20px; font-size: 13px; cursor: pointer;
+  transition: all .2s; font-family: inherit;
+}
+.chip:hover { border-color: var(--green-500); color: var(--green-600); }
+
+/* ---------- الأزرار ---------- */
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+.btn {
+  border: none; border-radius: var(--radius-sm); padding: 11px 20px;
+  font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
+  transition: transform .15s, box-shadow .2s, background .2s;
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--grad); color: #fff; box-shadow: 0 6px 16px rgba(26,138,84,.3); }
+.btn-primary:hover { box-shadow: 0 10px 24px rgba(26,138,84,.42); }
+.btn-ghost { background: var(--surface-2); color: var(--text); }
+.btn-ghost:hover { background: var(--border); }
+.btn-soft { background: rgba(34,164,99,.12); color: var(--green-600); }
+.btn-soft:hover { background: rgba(34,164,99,.2); }
+.btn-tiny { padding: 6px 12px; font-size: 12px; background: var(--surface-2); color: var(--text); }
+.btn-tiny.danger { background: rgba(220,53,69,.12); color: #dc3545; }
+
+/* ---------- شبكة الخيارات ---------- */
+.q-head { margin-bottom: 16px; }
+.q-index {
+  display: inline-block; background: var(--surface-2); color: var(--green-600);
+  padding: 3px 12px; border-radius: 14px; font-size: 12px; font-weight: 700; margin-bottom: 8px;
+}
+.options-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;
+}
+.option {
+  display: flex; align-items: center; gap: 10px; padding: 12px 14px;
+  background: var(--surface-2); border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); cursor: pointer; font-size: 14px;
+  transition: all .18s; user-select: none;
+}
+.option:hover { border-color: var(--green-300); }
+.option.selected { border-color: var(--green-500); background: rgba(34,164,99,.1); }
+.option input { accent-color: var(--green-600); width: 17px; height: 17px; pointer-events: none; }
+
+/* ---------- النتيجة ---------- */
+.result-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+.result-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.note {
+  background: rgba(34,164,99,.09); border-right: 4px solid var(--green-500);
+  padding: 12px 16px; border-radius: 8px; margin: 16px 0; font-size: 14px;
+}
+.note ul { margin: 6px 0 0; padding-right: 20px; }
+
+.tabs { display: flex; gap: 6px; margin: 18px 0 0; border-bottom: 2px solid var(--border); }
+.tab {
+  background: none; border: none; padding: 10px 18px; cursor: pointer;
+  font-size: 14px; font-weight: 600; color: var(--text-muted);
+  border-bottom: 3px solid transparent; margin-bottom: -2px; font-family: inherit;
+}
+.tab.active { color: var(--green-600); border-bottom-color: var(--green-500); }
+.tab-body { margin-top: 14px; }
+.output {
+  background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 18px; white-space: pre-wrap; word-wrap: break-word; font-size: 14px;
+  line-height: 1.9; max-height: 520px; overflow-y: auto; direction: rtl;
+  font-family: "Consolas", "Courier New", monospace;
+}
+.output.markdown { font-family: var(--font); white-space: normal; }
+.output.markdown h3 { color: var(--green-600); margin: 14px 0 6px; }
+.output.markdown h4 { margin: 12px 0 4px; }
+.output.markdown ul { padding-right: 22px; }
+
+/* ---------- المكتبة ---------- */
+.lib-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+.lib-head .input { max-width: 300px; margin: 0; }
+.lib-list { margin-top: 16px; display: flex; flex-direction: column; gap: 10px; }
+.lib-item {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding: 14px 16px; background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); flex-wrap: wrap;
+}
+.lib-item h3 { margin: 0 0 4px; font-size: 15px; }
+.lib-item-actions { display: flex; gap: 6px; }
+.empty { text-align: center; color: var(--text-muted); padding: 30px; }
+
+/* ---------- الإحصائيات ---------- */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+.stat-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 20px; text-align: center; box-shadow: var(--shadow);
+}
+.stat-icon { font-size: 26px; }
+.stat-value { font-size: 26px; font-weight: 800; color: var(--green-600); margin: 6px 0; }
+.stat-label { font-size: 13px; color: var(--text-muted); }
+.bars { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
+.bar-row { display: grid; grid-template-columns: 160px 1fr 90px; align-items: center; gap: 10px; }
+.bar-label { font-size: 13px; font-weight: 600; }
+.bar-track { background: var(--surface-2); height: 12px; border-radius: 8px; overflow: hidden; }
+.bar-fill { height: 100%; background: var(--grad); border-radius: 8px; transition: width .6s ease; }
+.bar-val { font-size: 12px; color: var(--text-muted); }
+
+/* ---------- عن التطبيق ---------- */
+.about h3 { color: var(--green-600); margin: 18px 0 6px; }
+.about ul { padding-right: 22px; }
+.about code { background: var(--surface-2); padding: 2px 6px; border-radius: 5px; font-size: 13px; }
+
+/* ---------- Toast + Modal ---------- */
+.toast {
+  position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%) translateY(80px);
+  background: var(--green-700); color: #fff; padding: 12px 24px; border-radius: 30px;
+  font-size: 14px; font-weight: 600; box-shadow: var(--shadow-lg); opacity: 0;
+  transition: all .3s; z-index: 100; pointer-events: none;
+}
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+.modal {
+  position: fixed; inset: 0; background: rgba(0,0,0,.5); display: none;
+  align-items: center; justify-content: center; z-index: 90; padding: 20px;
+}
+.modal.open { display: flex; }
+.modal-box {
+  background: var(--surface); border-radius: var(--radius); padding: 22px;
+  max-width: 680px; width: 100%; max-height: 85vh; overflow-y: auto; box-shadow: var(--shadow-lg);
+}
+.modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.modal-head h3 { margin: 0; }
+
+/* ---------- التذييل ---------- */
+.footer { text-align: center; padding: 24px; color: var(--text-muted); font-size: 12px; border-top: 1px solid var(--border); }
+
+/* ---------- الحركات ---------- */
+.fade-in { animation: fadeIn .4s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* ---------- التجاوب ---------- */
+@media (max-width: 640px) {
+  .topbar { padding: 12px 16px; }
+  .brand h1 { font-size: 16px; }
+  .container { padding: 0 14px 40px; }
+  .card { padding: 18px; }
+  .bar-row { grid-template-columns: 1fr; gap: 4px; }
+  .result-head { flex-direction: column; align-items: stretch; }
+}
+
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">✦</span>
+      <div>
+        <h1>مولّد البروميت الاحترافي</h1>
+        <span class="tagline">من الفكرة إلى بروميت جاهز للتنفيذ</span>
+      </div>
+    </div>
+    <nav class="nav">
+      <a href="#" class="nav-link active" data-route="builder">المولّد</a>
+      <a href="#" class="nav-link" data-route="library">المكتبة</a>
+      <a href="#" class="nav-link" data-route="dashboard">الإحصائيات</a>
+      <a href="#" class="nav-link" data-route="about">عن التطبيق</a>
+      <button id="themeToggle" class="icon-btn" title="الوضع الليلي/النهاري">🌙</button>
+    </nav>
+  </header>
+
+  <div class="statusbar">
+    <span id="backendBadge" class="badge badge-local">● وضع محلي</span>
+  </div>
+
+  <main id="view" class="container"></main>
+
+  <footer class="footer">
+    <p>مولّد البروميت الاحترافي — واجهة أمامية + خلفية Node/Express + قاعدة SQLite/LocalStorage</p>
+  </footer>
+
+  <div id="toast" class="toast"></div>
+  <div id="modal" class="modal"></div>
+
+  <script>
+/* ===== config.js ===== */
+/*
+ * config.js
+ * يحتوي على بيانات الأسئلة الخمسة وخياراتها، وتعريفات أنواع المخرجات.
+ * مبني على منهجية "تحويل الفكرة إلى بروميت احترافي".
+ */
+
+// أنواع المخرجات الرئيسية التي يتغير بناءً عليها شكل البروميت النهائي
+const OUTPUT_KINDS = {
+  platform: { key: 'platform', label: 'منصة / تطبيق', icon: '🖥️' },
+  report: { key: 'report', label: 'تقرير احترافي', icon: '📊' },
+  image: { key: 'image', label: 'صورة / إنفوجرافيك', icon: '🎨' },
+  initiative: { key: 'initiative', label: 'فكرة / مبادرة', icon: '💡' },
+};
+
+// الأسئلة الخمسة — كل سؤال يسمح باختيار أكثر من عنصر (multi-select)
+const QUESTIONS = [
+  {
+    id: 'q1',
+    title: 'ما نوع المخرج المطلوب؟',
+    hint: 'يمكنك اختيار أكثر من خيار',
+    multi: true,
+    // kind: يربط الخيار بنوع المخرج لتوليد البروميت المناسب
+    options: [
+      { id: 'platform_full', label: 'منصة رقمية متكاملة', kind: 'platform' },
+      { id: 'web_app', label: 'تطبيق ويب', kind: 'platform' },
+      { id: 'desktop_app', label: 'تطبيق سطح مكتب', kind: 'platform' },
+      { id: 'dashboard', label: 'لوحة تحكم تفاعلية', kind: 'platform' },
+      { id: 'mvp', label: 'نموذج أولي MVP', kind: 'platform' },
+      { id: 'report_pro', label: 'تقرير احترافي', kind: 'report' },
+      { id: 'report_exec', label: 'تقرير تنفيذي مختصر', kind: 'report' },
+      { id: 'report_analytic', label: 'تقرير تحليلي تفصيلي', kind: 'report' },
+      { id: 'image_design', label: 'صورة تصميمية', kind: 'image' },
+      { id: 'infographic', label: 'إنفوجرافيك', kind: 'image' },
+      { id: 'presentation', label: 'عرض تقديمي', kind: 'image' },
+      { id: 'initiative', label: 'فكرة مبادرة', kind: 'initiative' },
+      { id: 'operating_model', label: 'نموذج تشغيلي', kind: 'initiative' },
+      { id: 'business_plan', label: 'خطة عمل', kind: 'initiative' },
+      { id: 'prompt_code', label: 'بروميت برمجي فقط', kind: 'platform' },
+      { id: 'prompt_design', label: 'بروميت تصميم فقط', kind: 'image' },
+      { id: 'prompt_analysis', label: 'بروميت تحليل فقط', kind: 'report' },
+    ],
+  },
+  {
+    id: 'q2',
+    title: 'ما الوظائف أو المكونات المطلوبة؟',
+    hint: 'يمكنك اختيار أكثر من خيار',
+    multi: true,
+    options: [
+      { id: 'auth', label: 'تسجيل دخول' },
+      { id: 'users', label: 'إدارة مستخدمين' },
+      { id: 'roles', label: 'صلاحيات متعددة' },
+      { id: 'kpi_dash', label: 'لوحة مؤشرات' },
+      { id: 'tasks', label: 'إدارة مهام' },
+      { id: 'projects', label: 'إدارة مشاريع' },
+      { id: 'meetings', label: 'إدارة اجتماعات' },
+      { id: 'kpi', label: 'إدارة مؤشرات أداء KPI' },
+      { id: 'risks', label: 'إدارة مخاطر' },
+      { id: 'initiatives', label: 'إدارة مبادرات' },
+      { id: 'entities', label: 'إدارة جهات أو إدارات' },
+      { id: 'crud', label: 'إضافة وتعديل وحذف البيانات' },
+      { id: 'search', label: 'بحث وتصفية' },
+      { id: 'import_excel', label: 'رفع ملفات Excel' },
+      { id: 'import_files', label: 'رفع ملفات PDF أو صور' },
+      { id: 'export_excel', label: 'تصدير Excel' },
+      { id: 'export_pdf', label: 'تصدير PDF' },
+      { id: 'export_image', label: 'تصدير صورة' },
+      { id: 'auto_reports', label: 'إنشاء تقارير تلقائية' },
+      { id: 'charts', label: 'رسوم بيانية' },
+      { id: 'gis', label: 'خرائط GIS' },
+      { id: 'notifications', label: 'تنبيهات وإشعارات' },
+      { id: 'audit_log', label: 'سجل تحديثات' },
+      { id: 'archive', label: 'أرشفة' },
+      { id: 'settings', label: 'صفحة إعدادات' },
+      { id: 'exec_summary', label: 'صفحة ملخص تنفيذي' },
+      { id: 'record_details', label: 'صفحة تفاصيل لكل سجل' },
+    ],
+  },
+  {
+    id: 'q3',
+    title: 'كيف تريد حفظ أو إدارة البيانات؟',
+    hint: 'يمكنك اختيار أكثر من خيار',
+    multi: true,
+    options: [
+      { id: 'none', label: 'بدون قاعدة بيانات في النسخة الأولى' },
+      { id: 'localstorage', label: 'LocalStorage داخل المتصفح' },
+      { id: 'json', label: 'ملف JSON' },
+      { id: 'excel', label: 'ملف Excel قابل للرفع والتحديث' },
+      { id: 'sqlite', label: 'SQLite' },
+      { id: 'mysql', label: 'MySQL' },
+      { id: 'firebase', label: 'Firebase' },
+      { id: 'supabase', label: 'Supabase' },
+      { id: 'gsheets', label: 'Google Sheets' },
+      { id: 'local_db', label: 'قاعدة بيانات محلية قابلة للتنزيل' },
+      { id: 'import_export_db', label: 'قاعدة بيانات يمكن استيرادها وتصديرها' },
+      { id: 'suggest', label: 'اقترح الأنسب حسب الفكرة' },
+    ],
+  },
+  {
+    id: 'q4',
+    title: 'ما أسلوب التصميم والمظهر المطلوب؟',
+    hint: 'يمكنك اختيار أكثر من خيار',
+    multi: true,
+    options: [
+      { id: 'gov', label: 'تصميم حكومي رسمي' },
+      { id: 'exec_luxury', label: 'تصميم تنفيذي فاخر' },
+      { id: 'apple', label: 'عصري شبيه بتطبيقات Apple' },
+      { id: 'adobe', label: 'قريب من أسلوب Adobe' },
+      { id: 'simple', label: 'بسيط وسهل الاستخدام' },
+      { id: 'leadership', label: 'احترافي للقيادات' },
+      { id: 'gov_platform', label: 'مخصص للمنصات الحكومية' },
+      { id: 'arabic', label: 'يدعم اللغة العربية بالكامل' },
+      { id: 'rtl', label: 'اتجاه RTL' },
+      { id: 'green', label: 'ألوان خضراء / تدرجات خضراء' },
+      { id: 'neutral', label: 'ألوان محايدة ورسمية' },
+      { id: 'stat_cards', label: 'بطاقات إحصائية واضحة' },
+      { id: 'big_icons', label: 'أيقونات كبيرة وواضحة' },
+      { id: 'transitions', label: 'انتقالات سلسة' },
+      { id: 'responsive', label: 'متجاوب لكل الشاشات' },
+      { id: 'presentation_ready', label: 'يصلح للعرض أمام القيادات' },
+      { id: 'infographic_style', label: 'إنفوجرافيكي بصري' },
+      { id: 'suggest_identity', label: 'اقترح الهوية البصرية الأنسب' },
+    ],
+  },
+  {
+    id: 'q5',
+    title: 'ما مستوى التفصيل المطلوب في المخرج النهائي؟',
+    hint: 'يمكنك اختيار أكثر من خيار',
+    multi: true,
+    options: [
+      { id: 'concise', label: 'بروميت مختصر وواضح' },
+      { id: 'detailed', label: 'بروميت تفصيلي قابل للنسخ' },
+      { id: 'full_code', label: 'بروميت برمجي لإنتاج كود كامل' },
+      { id: 'report_prompt', label: 'بروميت لتوليد تقرير احترافي' },
+      { id: 'image_prompt', label: 'بروميت لتوليد صورة أو إنفوجرافيك' },
+      { id: 'initiative_prompt', label: 'بروميت لتطوير فكرة أو مبادرة' },
+      { id: 'full_platform', label: 'بروميت لإنتاج منصة كاملة' },
+      { id: 'mvp_fast', label: 'بروميت لإنتاج MVP سريع' },
+      { id: 'file_structure', label: 'مع هيكل ملفات المشروع' },
+      { id: 'db_req', label: 'مع متطلبات قاعدة البيانات' },
+      { id: 'design_req', label: 'مع متطلبات التصميم' },
+      { id: 'use_cases', label: 'مع سيناريوهات الاستخدام' },
+      { id: 'qa', label: 'مع اختبارات الجودة' },
+      { id: 'roadmap', label: 'مع خطة تطوير مستقبلية' },
+      { id: 'exec_output', label: 'مخرج تنفيذي مناسب للقيادات' },
+      { id: 'tech_output', label: 'مخرج فني مناسب للمبرمجين' },
+      { id: 'advisory_output', label: 'مخرج استشاري لاتخاذ القرار' },
+    ],
+  },
+];
+
+if (typeof module !== 'undefined') {
+  module.exports = { QUESTIONS, OUTPUT_KINDS };
+}
+
+
+/* ===== templates.js ===== */
+/*
+ * templates.js
+ * محرّك توليد البروميت الاحترافي.
+ * يأخذ الفكرة + الاختيارات ويُنتج:
+ *   1) مقترح احترافي منظم (Proposal)
+ *   2) بروميت نهائي جاهز للنسخ يتغير حسب نوع المخرج (منصة / تقرير / صورة / مبادرة)
+ */
+
+// أدوات مساعدة صغيرة
+function labelsFor(questionId, selectedIds) {
+  const q = QUESTIONS.find((x) => x.id === questionId);
+  if (!q) return [];
+  return q.options.filter((o) => selectedIds.includes(o.id)).map((o) => o.label);
+}
+function bullets(arr) {
+  return arr.map((x) => `- ${x}`).join('\n');
+}
+function numbered(arr) {
+  return arr.map((x, i) => `${i + 1}. ${x}`).join('\n');
+}
+
+// تحديد أنواع المخرجات المختارة (من السؤال الأول)
+function selectedKinds(answers) {
+  const q1 = QUESTIONS[0];
+  const ids = answers.q1 || [];
+  const kinds = new Set();
+  q1.options.forEach((o) => {
+    if (ids.includes(o.id) && o.kind) kinds.add(o.kind);
+  });
+  if (kinds.size === 0) kinds.add('platform'); // افتراض مهني
+  return Array.from(kinds);
+}
+
+// اقتراح آلية البيانات الأنسب في حال لم يحدد المستخدم أو طلب اقتراحاً
+function suggestStorage(dataLabels) {
+  if (dataLabels.length === 0 || dataLabels.includes('اقترح الأنسب حسب الفكرة')) {
+    return 'LocalStorage للنموذج الأولي مع إمكانية الترقية إلى Supabase أو Firebase عند التوسع';
+  }
+  return dataLabels.join('، ');
+}
+
+/* ============================================================
+ * 1) المقترح الاحترافي (Proposal) — 20 نقطة
+ * ============================================================ */
+function buildProposal(input) {
+  const { idea, answers, assumptions } = input;
+  const kinds = selectedKinds(answers);
+  const kindLabels = kinds.map((k) => OUTPUT_KINDS[k].label).join(' + ');
+  const funcs = labelsFor('q2', answers.q2 || []);
+  const data = labelsFor('q3', answers.q3 || []);
+  const design = labelsFor('q4', answers.q4 || []);
+  const detail = labelsFor('q5', answers.q5 || []);
+
+  const name = deriveName(idea, kinds);
+
+  const p = [];
+  p.push(`## المقترح الاحترافي`);
+  p.push(`**1) الاسم المقترح:** ${name}`);
+  p.push(`**2) نوع المخرج:** ${kindLabels}`);
+  p.push(`**3) وصف مختصر:** حلٌّ رقمي يحوّل الفكرة التالية إلى مخرج قابل للتنفيذ: «${idea.trim()}».`);
+  p.push(`**4) المشكلة التي يعالجها:** ${deriveProblem(idea, kinds)}`);
+  p.push(`**5) الهدف الرئيسي:** ${deriveGoal(idea, kinds)}`);
+  p.push(`**6) الفئات المستهدفة:** القيادات، مدراء المشاريع والبرامج، الفرق التشغيلية، والمستخدمون غير التقنيين.`);
+  p.push(`**7) نطاق العمل:** ${kindLabels} يغطي المكونات المختارة أدناه مع قابلية التوسع لاحقاً.`);
+  p.push(`**8) المكونات الرئيسية:**\n${funcs.length ? bullets(funcs) : '- تُستنتج من الفكرة (إدخال، معالجة، إخراج، حفظ)'}`);
+  p.push(`**9) سير العمل المقترح:** ${deriveWorkflow(kinds)}`);
+  p.push(`**10) نوع البيانات المطلوبة:** ${data.length ? data.join('، ') : 'تُشتق من طبيعة الفكرة'}`);
+  p.push(`**11) الصلاحيات والأدوار:** ${(answers.q2 || []).includes('roles') ? 'أدوار متعددة (مسؤول نظام / محرر / مستعرض)' : 'دور واحد افتراضي، قابل للتوسع لأدوار متعددة'}`);
+  p.push(`**12) لوحات التحكم/التقارير:** ${(answers.q2 || []).includes('kpi_dash') || (answers.q2 || []).includes('auto_reports') ? 'لوحة مؤشرات وتقارير تلقائية' : 'ملخص تنفيذي أساسي قابل للتوسع'}`);
+  p.push(`**13) المؤشرات المقترحة:** عدد العناصر، معدل الإنجاز، التوزيع حسب الفئة، آخر التحديثات.`);
+  p.push(`**14) متطلبات التصميم:** ${design.length ? design.join('، ') : 'واجهة عربية RTL احترافية، تدرجات هادئة، بطاقات إحصائية، تصميم متجاوب'}`);
+  p.push(`**15) المتطلبات التقنية:** واجهة أمامية حديثة، منطق واضح، أداء سريع، توافق متصفحات، بدون أخطاء Console.`);
+  p.push(`**16) آلية حفظ البيانات:** ${suggestStorage(data)}.`);
+  p.push(`**17) آلية التصدير/النشر:** نسخ مباشر، تصدير نصي/PDF، وقابلية النشر على استضافة ثابتة أو خادم.`);
+  p.push(`**18) متطلبات الجودة والاختبار:** اختبار الإدخال، المعالجة، الحفظ، التصدير، والتجاوب مع الجوال.`);
+  p.push(`**19) قابلية التوسع:** بنية معيارية تسمح بإضافة وحدات ومصادر بيانات ومستخدمين لاحقاً.`);
+  p.push(`**20) الافتراضات المهنية:**\n${assumptions.length ? bullets(assumptions) : '- لا توجد فجوات جوهرية؛ اعتُمدت أفضل الممارسات.'}`);
+
+  return p.join('\n\n');
+}
+
+// اشتقاق اسم مقترح مبسّط من الفكرة
+function deriveName(idea, kinds) {
+  const trimmed = idea.trim().replace(/\s+/g, ' ');
+  const short = trimmed.length > 40 ? trimmed.slice(0, 40) + '…' : trimmed;
+  const kindWord = kinds.includes('platform') ? 'منصة' : kinds.includes('report') ? 'تقرير' : kinds.includes('image') ? 'تصميم' : 'مبادرة';
+  return `${kindWord} «${short}»`;
+}
+function deriveProblem(idea) {
+  return `صعوبة تنفيذ أو تنظيم ما ورد في الفكرة يدوياً، والحاجة إلى حلٍّ رقمي منظّم يوفّر الوقت ويرفع الجودة.`;
+}
+function deriveGoal(idea, kinds) {
+  if (kinds.includes('platform')) return 'توفير أداة رقمية تفاعلية تنفّذ الفكرة كاملةً وتعمل فعلياً.';
+  if (kinds.includes('report')) return 'إنتاج تقرير احترافي منظّم يدعم اتخاذ القرار.';
+  if (kinds.includes('image')) return 'إنتاج تصميم بصري احترافي واضح ومناسب للعرض.';
+  return 'تطوير الفكرة إلى مبادرة قابلة للعرض على القيادات والتنفيذ.';
+}
+function deriveWorkflow(kinds) {
+  if (kinds.includes('platform')) return 'إدخال البيانات → معالجتها وعرضها في لوحات → حفظها → تصديرها/مشاركتها.';
+  if (kinds.includes('report')) return 'جمع البيانات → تحليل → استخلاص نتائج → توصيات → خطة عمل.';
+  if (kinds.includes('image')) return 'تحديد الرسالة → ترتيب العناصر بصرياً → إخراج نهائي متناسق.';
+  return 'تحديد المشكلة → تصميم المبادرة → مراحل التنفيذ → المؤشرات والحوكمة.';
+}
+
+/* ============================================================
+ * 2) البروميت النهائي حسب نوع المخرج
+ * ============================================================ */
+
+function platformPrompt(input) {
+  const { idea, answers } = input;
+  const funcs = labelsFor('q2', answers.q2 || []);
+  const data = labelsFor('q3', answers.q3 || []);
+  const design = labelsFor('q4', answers.q4 || []);
+  const detail = labelsFor('q5', answers.q5 || []);
+  const storage = suggestStorage(data);
+
+  return `# بروميت: بناء منصة/تطبيق ويب احترافي
+
+## 1) الدور المطلوب
+تصرّف كـ Full Stack Developer محترف، وخبير UI/UX، وخبير تطبيقات الأعمال الحكومية، وخبير في التخطيط الاستراتيجي وإدارة المشاريع ومؤشرات الأداء، وقادر على بناء تطبيق قابل للتشغيل محلياً وعلى GitHub Pages أو الاستضافة.
+
+## 2) وصف التطبيق
+ابنِ تطبيق ويب فعلياً يحقق الفكرة التالية:
+«${idea.trim()}»
+يجب أن يعمل التطبيق كاملاً دون أزرار أو روابط معطّلة، مع بيانات تجريبية جاهزة.
+
+## 3) المتطلبات الوظيفية
+${funcs.length ? bullets(funcs) : '- إدخال وتعديل وحذف البيانات\n- عرضها في لوحة\n- حفظها\n- تصديرها'}
+
+## 4) المتطلبات غير الوظيفية
+- سهولة الاستخدام وسرعة الأداء.
+- دعم اللغة العربية بالكامل واتجاه RTL.
+- توافق مع المتصفحات وتصميم متجاوب (جوال/تابلت/شاشات كبيرة).
+- تجربة استخدام احترافية وحماية البيانات بقدر الإمكان.
+- قابلية التوسع.
+
+## 5) متطلبات التصميم
+${design.length ? bullets(design) : '- واجهة عربية احترافية\n- تدرجات خضراء هادئة مريحة للعين\n- بطاقات إحصائية وأيقونات واضحة\n- جداول منظمة ورسوم بيانية تفاعلية\n- انتقالات سلسة وتجربة قريبة من Apple و Adobe'}
+
+## 6) قاعدة البيانات
+آلية الحفظ: ${storage}.
+صمّم الجداول/الهياكل المناسبة للفكرة (مثل: المستخدمين، السجلات الرئيسية، الفئات، سجل التحديثات، المرفقات).
+
+## 7) متطلبات الكود
+- اكتب الكود كاملاً وقسّم الملفات باحترافية.
+- لا تترك أي زر أو رابط غير فعّال.
+- أضف بيانات تجريبية وتعليقات توضيحية.
+- تأكد من عدم وجود أخطاء Console.
+- أنشئ README يوضح طريقة التشغيل، وجهّز المشروع للنشر.
+${detail.includes('مع هيكل ملفات المشروع') ? '- أرفق هيكل ملفات المشروع كاملاً.' : ''}
+
+## 8) الاختبار
+اختبر: ${funcs.includes('تسجيل دخول') ? 'تسجيل الدخول، ' : ''}الإضافة، التعديل، الحذف، البحث، الفلاتر، الرسوم البيانية، التصدير، حفظ البيانات، التوافق مع الجوال، والروابط والتنقل.
+
+## 9) المخرج المتوقع
+${detail.length ? bullets(detail) : '- كود كامل يعمل + README + بيانات تجريبية'}`;
+}
+
+function reportPrompt(input) {
+  const { idea, answers } = input;
+  const design = labelsFor('q4', answers.q4 || []);
+  return `# بروميت: إعداد تقرير احترافي
+
+## الدور
+تصرّف كمستشار في التخطيط الاستراتيجي وتحليل الأداء المؤسسي، وأعدّ تقريراً احترافياً بلغة عربية مهنية استشارية.
+
+## موضوع التقرير
+«${idea.trim()}»
+
+## هيكل التقرير المطلوب
+${numbered([
+  'عنوان التقرير',
+  'الملخص التنفيذي',
+  'الخلفية والسياق',
+  'المشكلة أو الفرصة',
+  'نطاق التقرير',
+  'منهجية التحليل',
+  'البيانات المطلوبة',
+  'التحليل الكمي',
+  'التحليل النوعي',
+  'مؤشرات الأداء',
+  'نقاط القوة / الضعف / الفرص / المهددات (SWOT)',
+  'الفجوات والمخاطر',
+  'التوصيات التنفيذية',
+  'خطة العمل والأولويات',
+  'الجدول الزمني المقترح',
+  'مؤشرات قياس نجاح التوصيات',
+  'خاتمة تنفيذية موجّهة للقيادات',
+])}
+
+## أسلوب الكتابة
+لغة عربية مهنية، مختصرة عند الحاجة، منطق استشاري واضح.${design.includes('احترافي للقيادات') ? ' صياغة مناسبة للعرض على القيادات العليا.' : ''}`;
+}
+
+function imagePrompt(input) {
+  const { idea, answers } = input;
+  const design = labelsFor('q4', answers.q4 || []);
+  return `# بروميت: توليد صورة / إنفوجرافيك احترافي
+
+## الدور
+تصرّف كمصمم جرافيك ومصمم إنفوجرافيك محترف يراعي الوضوح والاحترافية والعرض التنفيذي.
+
+## وصف التصميم
+أنتج تصميماً بصرياً يعبّر عن: «${idea.trim()}»
+
+## مواصفات التصميم
+${numbered([
+  'نوع الصورة: إنفوجرافيك / مخطط تدفق / لوحة تنفيذية (اختر الأنسب)',
+  'الهدف من الصورة والجمهور المستهدف',
+  'العناصر الرئيسية والتسلسل البصري',
+  'النصوص الأساسية داخل الصورة (مختصرة وواضحة)',
+  'الهوية البصرية والألوان' + (design.includes('ألوان خضراء / تدرجات خضراء') ? ' (تدرجات خضراء مؤسسية)' : ''),
+  'الخطوط والأيقونات وأسلوب التصميم',
+  'توزيع متوازن للعناصر ومنع الازدحام',
+  'المقاسات المقترحة (مثل 1080×1350 أو 1920×1080)',
+])}
+
+## قواعد إلزامية
+- دعم كامل للغة العربية ووضوح الحروف العربية دون تشوّه.
+- تصميم نظيف مناسب للعرض التنفيذي، غير مزدحم.
+- تباين لوني مريح للعين.`;
+}
+
+function initiativePrompt(input) {
+  const { idea } = input;
+  return `# بروميت: تطوير فكرة إلى مبادرة احترافية
+
+## الدور
+تصرّف كمستشار في التخطيط الاستراتيجي وإدارة البرامج والمبادرات، وطوّر الفكرة إلى مبادرة قابلة للعرض على القيادات.
+
+## الفكرة
+«${idea.trim()}»
+
+## مكونات المبادرة المطلوبة
+${numbered([
+  'اسم المبادرة ووصفها',
+  'المبرر الاستراتيجي والمشكلة/الفجوة',
+  'الهدف العام والأهداف التفصيلية',
+  'الفئات المستهدفة وأصحاب المصلحة',
+  'نطاق المبادرة ومكوناتها',
+  'مراحل التنفيذ ونموذج التشغيل',
+  'الموارد المطلوبة',
+  'مؤشرات الأداء وعوامل النجاح الحرجة',
+  'المخاطر والحوكمة',
+  'خطة التواصل والأثر المتوقع',
+  'خارطة طريق مختصرة',
+])}
+
+## المخرج
+مبادرة قابلة للعرض على القيادات وقابلة للتحويل لاحقاً إلى مشروع أو برنامج.`;
+}
+
+// المولّد الرئيسي — يدمج المخرجات عند اختيار أكثر من نوع
+function generatePrompt(input) {
+  const kinds = selectedKinds(input.answers);
+  const parts = [];
+  if (kinds.includes('platform')) parts.push(platformPrompt(input));
+  if (kinds.includes('report')) parts.push(reportPrompt(input));
+  if (kinds.includes('image')) parts.push(imagePrompt(input));
+  if (kinds.includes('initiative')) parts.push(initiativePrompt(input));
+  const joined = parts.join('\n\n---\n\n');
+  const header = kinds.length > 1
+    ? '> بروميت موحّد يجمع أكثر من نوع مخرج حسب اختيارك.\n\n'
+    : '';
+  return header + joined;
+}
+
+// كشف الافتراضات المهنية عند نقص الإجابات
+function detectAssumptions(answers) {
+  const a = [];
+  if (!(answers.q1 || []).length) a.push('لم يُحدَّد نوع المخرج → اعتُمد "تطبيق ويب" كافتراض.');
+  if (!(answers.q3 || []).length) a.push('لم تُحدَّد آلية البيانات → اعتُمد LocalStorage للنموذج الأولي.');
+  if (!(answers.q4 || []).length) a.push('لم يُحدَّد التصميم → اعتُمدت هوية عربية RTL بتدرجات خضراء.');
+  if (!(answers.q2 || []).length) a.push('لم تُحدَّد الوظائف → اعتُمدت وظائف CRUD أساسية.');
+  return a;
+}
+
+if (typeof module !== 'undefined') {
+  module.exports = { generatePrompt, buildProposal, detectAssumptions, selectedKinds };
+}
+
+
+/* ===== storage.js ===== */
+/*
+ * storage.js
+ * طبقة تجريد للبيانات:
+ *   - افتراضياً تستخدم LocalStorage (تعمل على GitHub Pages وبدون خادم).
+ *   - إن وُجد خادم خلفي (Express + SQLite) تكتشفه تلقائياً وتزامن معه.
+ * كل الدوال ترجع Promise لتوحيد الواجهة.
+ */
+
+const Storage = (() => {
+  const LS_KEY = 'promptBuilder.prompts.v1';
+  const SETTINGS_KEY = 'promptBuilder.settings.v1';
+  // عنوان الخادم الخلفي (يُفعّل عند التشغيل المحلي)
+  const API_BASE = (location.protocol === 'file:')
+    ? 'http://localhost:4000/api'
+    : `${location.origin.replace(/:\d+$/, '')}:4000/api`;
+
+  let backendAvailable = false;
+
+  // كشف توفّر الخادم الخلفي (مع مهلة قصيرة كي لا يعلّق الواجهة)
+  async function detectBackend() {
+    try {
+      const ctrl = new AbortController();
+      const t = setTimeout(() => ctrl.abort(), 900);
+      const res = await fetch(`${API_BASE}/health`, { signal: ctrl.signal });
+      clearTimeout(t);
+      backendAvailable = res.ok;
+    } catch (_) {
+      backendAvailable = false;
+    }
+    return backendAvailable;
+  }
+
+  function isBackend() { return backendAvailable; }
+
+  // ---- LocalStorage helpers ----
+  function lsRead() {
+    try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; }
+    catch (_) { return []; }
+  }
+  function lsWrite(list) {
+    localStorage.setItem(LS_KEY, JSON.stringify(list));
+  }
+
+  // ---- CRUD موحّد ----
+  async function list() {
+    if (backendAvailable) {
+      try {
+        const res = await fetch(`${API_BASE}/prompts`);
+        if (res.ok) return await res.json();
+      } catch (_) { /* fallback */ }
+    }
+    return lsRead().sort((a, b) => b.createdAt - a.createdAt);
+  }
+
+  async function save(record) {
+    // record: {idea, answers, proposal, prompt, kinds}
+    const item = {
+      id: record.id || `p_${Date.now()}_${Math.floor(Math.random() * 1e4)}`,
+      title: record.title || 'بروميت بدون عنوان',
+      idea: record.idea || '',
+      answers: record.answers || {},
+      proposal: record.proposal || '',
+      prompt: record.prompt || '',
+      kinds: record.kinds || [],
+      createdAt: record.createdAt || Date.now(),
+    };
+    if (backendAvailable) {
+      try {
+        const res = await fetch(`${API_BASE}/prompts`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(item),
+        });
+        if (res.ok) return await res.json();
+      } catch (_) { /* fallback */ }
+    }
+    const listData = lsRead();
+    listData.push(item);
+    lsWrite(listData);
+    return item;
+  }
+
+  async function remove(id) {
+    if (backendAvailable) {
+      try {
+        const res = await fetch(`${API_BASE}/prompts/${id}`, { method: 'DELETE' });
+        if (res.ok) return true;
+      } catch (_) { /* fallback */ }
+    }
+    lsWrite(lsRead().filter((x) => x.id !== id));
+    return true;
+  }
+
+  async function clearAll() {
+    if (backendAvailable) {
+      try { await fetch(`${API_BASE}/prompts`, { method: 'DELETE' }); } catch (_) {}
+    }
+    lsWrite([]);
+    return true;
+  }
+
+  // ---- الإعدادات (محلية دائماً) ----
+  function getSettings() {
+    try { return JSON.parse(localStorage.getItem(SETTINGS_KEY)) || { theme: 'light' }; }
+    catch (_) { return { theme: 'light' }; }
+  }
+  function setSettings(s) {
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(s));
+  }
+
+  return { detectBackend, isBackend, list, save, remove, clearAll, getSettings, setSettings, API_BASE };
+})();
+
+
+/* ===== app.js ===== */
+/*
+ * app.js — منطق واجهة تطبيق "مولّد البروميت الاحترافي"
+ * SPA بسيط بدون أطر عمل: تبديل صفحات + إدارة حالة + توليد وحفظ.
+ */
+
+const App = (() => {
+  // الحالة
+  const state = {
+    step: 0,               // 0=الفكرة, 1..5=الأسئلة, 6=النتيجة
+    idea: '',
+    answers: { q1: [], q2: [], q3: [], q4: [], q5: [] },
+    result: null,          // { proposal, prompt, kinds, assumptions }
+  };
+
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+  const view = () => $('#view');
+
+  /* ---------- تهيئة ---------- */
+  async function init() {
+    applyTheme(Storage.getSettings().theme);
+    await Storage.detectBackend();
+    bindNav();
+    updateBackendBadge();
+    route('builder');
+  }
+
+  function bindNav() {
+    $$('[data-route]').forEach((el) => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        route(el.dataset.route);
+      });
+    });
+    $('#themeToggle').addEventListener('click', toggleTheme);
+  }
+
+  function updateBackendBadge() {
+    const badge = $('#backendBadge');
+    if (!badge) return;
+    if (Storage.isBackend()) {
+      badge.textContent = '● متصل بالخادم (SQLite)';
+      badge.className = 'badge badge-online';
+    } else {
+      badge.textContent = '● وضع محلي (LocalStorage)';
+      badge.className = 'badge badge-local';
+    }
+  }
+
+  /* ---------- التوجيه ---------- */
+  function route(name) {
+    $$('.nav-link').forEach((l) => l.classList.toggle('active', l.dataset.route === name));
+    if (name === 'builder') renderBuilder();
+    else if (name === 'library') renderLibrary();
+    else if (name === 'dashboard') renderDashboard();
+    else if (name === 'about') renderAbout();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ========================================================
+   * صفحة المولّد (خطوات)
+   * ====================================================== */
+  function renderBuilder() {
+    if (state.step === 0) return renderIdeaStep();
+    if (state.step >= 1 && state.step <= 5) return renderQuestionStep(state.step);
+    if (state.step === 6) return renderResult();
+  }
+
+  function stepper() {
+    const steps = ['الفكرة', 'السؤال 1', 'السؤال 2', 'السؤال 3', 'السؤال 4', 'السؤال 5', 'النتيجة'];
+    return `<div class="stepper">${steps.map((s, i) =>
+      `<div class="step ${i === state.step ? 'current' : ''} ${i < state.step ? 'done' : ''}">
+        <span class="step-dot">${i < state.step ? '✓' : i + 1}</span>
+        <span class="step-label">${s}</span>
+      </div>`).join('')}</div>`;
+  }
+
+  function renderIdeaStep() {
+    view().innerHTML = `
+      ${stepper()}
+      <section class="card fade-in">
+        <h2 class="card-title">💡 اكتب فكرتك الأولية</h2>
+        <p class="muted">صف فكرتك بجملة أو أكثر. سنحوّلها إلى بروميت احترافي عبر ٥ أسئلة موجّهة.</p>
+        <textarea id="ideaInput" class="textarea" rows="5"
+          placeholder="مثال: تطبيق ويب لمتابعة مؤشرات أداء المشاريع مع لوحة تحكم وتقارير تنفيذية…">${state.idea}</textarea>
+        <div class="chips">
+          ${ideaSamples().map((s) => `<button class="chip" data-sample="${encodeURIComponent(s)}">${s}</button>`).join('')}
+        </div>
+        <div class="actions">
+          <button id="startBtn" class="btn btn-primary">التالي ←</button>
+        </div>
+      </section>`;
+    $('#ideaInput').addEventListener('input', (e) => { state.idea = e.target.value; });
+    $$('[data-sample]').forEach((b) => b.addEventListener('click', () => {
+      state.idea = decodeURIComponent(b.dataset.sample);
+      $('#ideaInput').value = state.idea;
+    }));
+    $('#startBtn').addEventListener('click', () => {
+      if (!state.idea.trim()) { toast('يرجى كتابة الفكرة أولاً'); return; }
+      state.step = 1; renderBuilder();
+    });
+  }
+
+  function ideaSamples() {
+    return [
+      'نظام لإدارة المهام والاجتماعات',
+      'لوحة مؤشرات أداء استراتيجية',
+      'تقرير تنفيذي عن أداء المشاريع',
+      'مبادرة تحول رقمي لجهة حكومية',
+    ];
+  }
+
+  function renderQuestionStep(n) {
+    const q = QUESTIONS[n - 1];
+    const selected = state.answers[q.id] || [];
+    view().innerHTML = `
+      ${stepper()}
+      <section class="card fade-in">
+        <div class="q-head">
+          <span class="q-index">السؤال ${n} / 5</span>
+          <h2 class="card-title">${q.title}</h2>
+          <p class="hint">🔹 ${q.hint}</p>
+        </div>
+        <div class="options-grid">
+          ${q.options.map((o) => `
+            <label class="option ${selected.includes(o.id) ? 'selected' : ''}" data-opt="${o.id}">
+              <input type="checkbox" ${selected.includes(o.id) ? 'checked' : ''} />
+              <span>${o.icon ? o.icon + ' ' : ''}${o.label}</span>
+            </label>`).join('')}
+        </div>
+        <div class="actions">
+          <button class="btn btn-ghost" id="backBtn">→ السابق</button>
+          <button class="btn btn-ghost" id="skipBtn">تخطٍّ (افتراض مهني)</button>
+          <button class="btn btn-primary" id="nextBtn">${n === 5 ? 'توليد البروميت ✦' : 'التالي ←'}</button>
+        </div>
+      </section>`;
+
+    $$('.option').forEach((el) => el.addEventListener('click', (e) => {
+      e.preventDefault();
+      const id = el.dataset.opt;
+      const arr = state.answers[q.id];
+      const idx = arr.indexOf(id);
+      if (idx >= 0) arr.splice(idx, 1); else arr.push(id);
+      el.classList.toggle('selected');
+      $('input', el).checked = arr.includes(id);
+    }));
+    $('#backBtn').addEventListener('click', () => { state.step--; renderBuilder(); });
+    $('#skipBtn').addEventListener('click', () => nextStep(n));
+    $('#nextBtn').addEventListener('click', () => nextStep(n));
+  }
+
+  function nextStep(n) {
+    if (n < 5) { state.step = n + 1; renderBuilder(); }
+    else { generate(); }
+  }
+
+  /* ========================================================
+   * التوليد والنتيجة
+   * ====================================================== */
+  function generate() {
+    const assumptions = detectAssumptions(state.answers);
+    const input = { idea: state.idea, answers: state.answers, assumptions };
+    const proposal = buildProposal(input);
+    const prompt = generatePrompt(input);
+    const kinds = selectedKinds(state.answers);
+    state.result = { proposal, prompt, kinds, assumptions };
+    state.step = 6;
+    renderBuilder();
+  }
+
+  function renderResult() {
+    const { proposal, prompt, assumptions } = state.result;
+    view().innerHTML = `
+      ${stepper()}
+      <section class="card fade-in">
+        <div class="result-head">
+          <h2 class="card-title">✦ البروميت الاحترافي جاهز</h2>
+          <div class="result-actions">
+            <button class="btn btn-soft" id="copyBtn">📋 نسخ البروميت</button>
+            <button class="btn btn-soft" id="saveBtn">💾 حفظ</button>
+            <button class="btn btn-soft" id="txtBtn">⬇ تنزيل .txt</button>
+            <button class="btn btn-soft" id="mdBtn">⬇ تنزيل .md</button>
+            <button class="btn btn-soft" id="pdfBtn">🖨 PDF</button>
+          </div>
+        </div>
+
+        ${assumptions.length ? `<div class="note">🧠 <strong>افتراضات مهنية:</strong><ul>${assumptions.map((a) => `<li>${a}</li>`).join('')}</ul></div>` : ''}
+
+        <div class="tabs">
+          <button class="tab active" data-tab="prompt">البروميت النهائي</button>
+          <button class="tab" data-tab="proposal">المقترح الاحترافي</button>
+        </div>
+        <div class="tab-body">
+          <pre id="promptOut" class="output">${escapeHtml(prompt)}</pre>
+          <div id="proposalOut" class="output markdown" style="display:none">${renderMarkdown(proposal)}</div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-ghost" id="restartBtn">↺ بروميت جديد</button>
+          <button class="btn btn-ghost" id="editBtn">✎ تعديل الإجابات</button>
+        </div>
+      </section>`;
+
+    // تبويبات
+    $$('.tab').forEach((t) => t.addEventListener('click', () => {
+      $$('.tab').forEach((x) => x.classList.remove('active'));
+      t.classList.add('active');
+      const isPrompt = t.dataset.tab === 'prompt';
+      $('#promptOut').style.display = isPrompt ? 'block' : 'none';
+      $('#proposalOut').style.display = isPrompt ? 'none' : 'block';
+    }));
+
+    $('#copyBtn').addEventListener('click', () => copyText(prompt));
+    $('#saveBtn').addEventListener('click', savePrompt);
+    $('#txtBtn').addEventListener('click', () => download('prompt.txt', prompt, 'text/plain'));
+    $('#mdBtn').addEventListener('click', () => download('prompt.md', prompt, 'text/markdown'));
+    $('#pdfBtn').addEventListener('click', () => printPrompt(prompt));
+    $('#restartBtn').addEventListener('click', () => {
+      Object.assign(state, { step: 0, idea: '', answers: { q1: [], q2: [], q3: [], q4: [], q5: [] }, result: null });
+      renderBuilder();
+    });
+    $('#editBtn').addEventListener('click', () => { state.step = 1; renderBuilder(); });
+  }
+
+  async function savePrompt() {
+    const { proposal, prompt, kinds } = state.result;
+    const title = state.idea.trim().slice(0, 60) || 'بروميت بدون عنوان';
+    await Storage.save({ title, idea: state.idea, answers: state.answers, proposal, prompt, kinds });
+    toast('تم حفظ البروميت في المكتبة ✓');
+  }
+
+  /* ========================================================
+   * المكتبة
+   * ====================================================== */
+  async function renderLibrary() {
+    view().innerHTML = `<section class="card"><h2 class="card-title">📚 مكتبة البرومبتات</h2><p class="muted">جارٍ التحميل…</p></section>`;
+    const items = await Storage.list();
+    const rows = items.length ? items.map(libRow).join('') : '';
+    view().innerHTML = `
+      <section class="card fade-in">
+        <div class="lib-head">
+          <h2 class="card-title">📚 مكتبة البرومبتات (${items.length})</h2>
+          <input id="libSearch" class="input" placeholder="🔍 بحث بالعنوان أو الفكرة…" />
+        </div>
+        <div id="libList" class="lib-list">
+          ${rows || '<p class="empty">لا توجد برومبتات محفوظة بعد. أنشئ بروميت من صفحة المولّد.</p>'}
+        </div>
+      </section>`;
+    if (items.length) {
+      $('#libSearch').addEventListener('input', (e) => {
+        const q = e.target.value.trim().toLowerCase();
+        const filtered = items.filter((it) =>
+          (it.title || '').toLowerCase().includes(q) || (it.idea || '').toLowerCase().includes(q));
+        $('#libList').innerHTML = filtered.length ? filtered.map(libRow).join('') : '<p class="empty">لا نتائج مطابقة.</p>';
+        bindLibActions(items);
+      });
+      bindLibActions(items);
+    }
+  }
+
+  function libRow(it) {
+    const date = new Date(it.createdAt).toLocaleString('ar');
+    const kinds = (it.kinds || []).map((k) => OUTPUT_KINDS[k] ? OUTPUT_KINDS[k].icon : '').join(' ');
+    return `
+      <article class="lib-item" data-id="${it.id}">
+        <div class="lib-item-main">
+          <h3>${kinds} ${escapeHtml(it.title)}</h3>
+          <p class="muted small">${escapeHtml((it.idea || '').slice(0, 90))}</p>
+          <span class="small muted">${date}</span>
+        </div>
+        <div class="lib-item-actions">
+          <button class="btn btn-tiny" data-act="view" data-id="${it.id}">عرض</button>
+          <button class="btn btn-tiny" data-act="copy" data-id="${it.id}">نسخ</button>
+          <button class="btn btn-tiny danger" data-act="del" data-id="${it.id}">حذف</button>
+        </div>
+      </article>`;
+  }
+
+  function bindLibActions(items) {
+    $$('[data-act]').forEach((b) => b.addEventListener('click', async () => {
+      const it = items.find((x) => x.id === b.dataset.id);
+      if (!it) return;
+      if (b.dataset.act === 'copy') copyText(it.prompt);
+      else if (b.dataset.act === 'view') openModal(it);
+      else if (b.dataset.act === 'del') {
+        if (confirm('حذف هذا البروميت؟')) { await Storage.remove(it.id); renderLibrary(); }
+      }
+    }));
+  }
+
+  function openModal(it) {
+    const modal = $('#modal');
+    modal.innerHTML = `
+      <div class="modal-box">
+        <div class="modal-head">
+          <h3>${escapeHtml(it.title)}</h3>
+          <button class="btn btn-tiny" id="modalClose">✕</button>
+        </div>
+        <pre class="output">${escapeHtml(it.prompt)}</pre>
+        <div class="actions">
+          <button class="btn btn-primary" id="modalCopy">📋 نسخ</button>
+        </div>
+      </div>`;
+    modal.classList.add('open');
+    $('#modalClose').addEventListener('click', () => modal.classList.remove('open'));
+    $('#modalCopy').addEventListener('click', () => copyText(it.prompt));
+    modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('open'); });
+  }
+
+  /* ========================================================
+   * لوحة الإحصائيات
+   * ====================================================== */
+  async function renderDashboard() {
+    const items = await Storage.list();
+    const total = items.length;
+    const byKind = {};
+    items.forEach((it) => (it.kinds || []).forEach((k) => { byKind[k] = (byKind[k] || 0) + 1; }));
+    const last = items[0] ? new Date(items[0].createdAt).toLocaleDateString('ar') : '—';
+    const maxKind = Object.keys(byKind).sort((a, b) => byKind[b] - byKind[a])[0];
+
+    view().innerHTML = `
+      <section class="fade-in">
+        <h2 class="card-title" style="margin-bottom:16px">📈 لوحة الإحصائيات</h2>
+        <div class="stats-grid">
+          ${statCard('إجمالي البرومبتات', total, '📦')}
+          ${statCard('أنواع المخرجات', Object.keys(byKind).length, '🗂️')}
+          ${statCard('الأكثر توليداً', maxKind ? OUTPUT_KINDS[maxKind].label : '—', '⭐')}
+          ${statCard('آخر إنشاء', last, '🕒')}
+        </div>
+        <div class="card" style="margin-top:18px">
+          <h3 class="card-title">التوزيع حسب نوع المخرج</h3>
+          ${Object.keys(byKind).length ? barChart(byKind, total) : '<p class="empty">لا بيانات بعد.</p>'}
+        </div>
+      </section>`;
+  }
+
+  function statCard(label, value, icon) {
+    return `<div class="stat-card"><div class="stat-icon">${icon}</div>
+      <div class="stat-value">${value}</div><div class="stat-label">${label}</div></div>`;
+  }
+
+  function barChart(byKind, total) {
+    return `<div class="bars">${Object.keys(byKind).map((k) => {
+      const pct = Math.round((byKind[k] / total) * 100);
+      return `<div class="bar-row">
+        <span class="bar-label">${OUTPUT_KINDS[k].icon} ${OUTPUT_KINDS[k].label}</span>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+        <span class="bar-val">${byKind[k]} (${pct}%)</span>
+      </div>`;
+    }).join('')}</div>`;
+  }
+
+  /* ========================================================
+   * حول
+   * ====================================================== */
+  function renderAbout() {
+    view().innerHTML = `
+      <section class="card fade-in about">
+        <h2 class="card-title">ℹ️ عن التطبيق</h2>
+        <p><strong>مولّد البروميت الاحترافي</strong> أداة تحوّل فكرتك الأولية إلى بروميت احترافي جاهز للاستخدام في Google AI Studio أو Codex أو أدوات Vibe Coding، عبر ٥ أسئلة موجّهة متعددة الاختيارات.</p>
+        <h3>المزايا</h3>
+        <ul>
+          <li>توليد بروميت يتكيّف مع نوع المخرج (منصة / تقرير / صورة / مبادرة).</li>
+          <li>مكتبة لحفظ واسترجاع البرومبتات (LocalStorage أو خادم SQLite).</li>
+          <li>تصدير نصي / Markdown / PDF ونسخ فوري.</li>
+          <li>واجهة عربية RTL، وضع ليلي/نهاري، تصميم متجاوب.</li>
+        </ul>
+        <h3>البنية التقنية</h3>
+        <ul>
+          <li><strong>الواجهة الأمامية:</strong> HTML + CSS + JavaScript (بدون أطر، بلا خطوة بناء).</li>
+          <li><strong>الخلفية (اختيارية):</strong> Node.js + Express REST API.</li>
+          <li><strong>قاعدة البيانات:</strong> SQLite محلياً + LocalStorage كطبقة عميل.</li>
+        </ul>
+        <p class="muted small">النسخة المنشورة على GitHub Pages تعمل بوضع LocalStorage. لتفعيل الخادم وقاعدة SQLite شغّل مجلد <code>backend</code> محلياً.</p>
+      </section>`;
+  }
+
+  /* ========================================================
+   * أدوات مساعدة
+   * ====================================================== */
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    const t = $('#themeToggle');
+    if (t) t.textContent = theme === 'dark' ? '☀️' : '🌙';
+  }
+  function toggleTheme() {
+    const cur = Storage.getSettings().theme || 'light';
+    const next = cur === 'dark' ? 'light' : 'dark';
+    Storage.setSettings({ ...Storage.getSettings(), theme: next });
+    applyTheme(next);
+  }
+
+  async function copyText(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast('تم النسخ ✓');
+    } catch (_) {
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); ta.remove();
+      toast('تم النسخ ✓');
+    }
+  }
+
+  function download(filename, text, mime) {
+    const blob = new Blob([text], { type: `${mime};charset=utf-8` });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename; a.click();
+    URL.revokeObjectURL(url);
+    toast('تم التنزيل ✓');
+  }
+
+  function printPrompt(text) {
+    const w = window.open('', '_blank');
+    w.document.write(`<html dir="rtl" lang="ar"><head><meta charset="utf-8"><title>البروميت</title>
+      <style>body{font-family:'Segoe UI',Tahoma,sans-serif;padding:32px;line-height:1.9;white-space:pre-wrap;direction:rtl}</style>
+      </head><body>${escapeHtml(text)}</body></html>`);
+    w.document.close();
+    setTimeout(() => { w.print(); }, 300);
+  }
+
+  function toast(msg) {
+    const t = $('#toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  // Markdown مبسّط (عناوين، غامق، قوائم)
+  function renderMarkdown(md) {
+    return escapeHtml(md)
+      .replace(/^### (.*)$/gm, '<h4>$1</h4>')
+      .replace(/^## (.*)$/gm, '<h3>$1</h3>')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/^- (.*)$/gm, '<li>$1</li>')
+      .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
+      .replace(/\n{2,}/g, '<br><br>')
+      .replace(/\n/g, '<br>');
+  }
+
+  return { init };
+})();
+
+document.addEventListener('DOMContentLoaded', App.init);
+
+  </script>
+</body>
+</html>
